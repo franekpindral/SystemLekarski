@@ -1,2 +1,10 @@
-function getPesel(p : player):
-    set {_hash} to {_p} hashed with SHA-256
+import:
+    java.nio.charset.StandardCharsets
+    java.lang.String as JavaString
+
+function getPesel(player : player) :: text:
+    set {_hash} to {_player}'s name hashed with SHA-256
+    set {_digest} to {_hash}.getBytes(StandardCharsets.UTF_8)
+    set {_pesel} to (({_digest}[2] * 255 + {_digest}[1]) * 255) + {_digest}[0]
+    return JavaString.format("%%08d", {_pesel}.intValue())
+
